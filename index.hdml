@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RMP INTERIOR ERP Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<!-- Sidebar -->
+<aside class="sidebar">
+
+    <div class="logo-section">
+        <img src="assets/logo.png" alt="RMP Interior Logo">
+        <h2>RMP INTERIOR</h2>
+        <p>Built with Vision. Designed with Care.</p>
+    </div>
+
+    <ul class="menu">
+        <li><a href="#"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        <li><a href="#"><i class="fas fa-user-friends"></i> Customers</a></li>
+        <li><a href="#"><i class="fas fa-briefcase"></i> Projects</a></li>
+        <li><a href="#"><i class="fas fa-file-invoice"></i> Quotations</a></li>
+        <li><a href="#"><i class="fas fa-wallet"></i> Expenses</a></li>
+        <li><a href="#"><i class="fas fa-file-pdf"></i> Reports</a></li>
+        <li><a href="#"><i class="fas fa-database"></i> Backup</a></li>
+        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <header class="topbar">
+        <h1>Dashboard</h1>
+
+        <div class="company-info">
+            <span>📞 9080405311</span>
+            <span>📧 rmpinteriorwork@gmail.com</span>
+        </div>
+    </header>
+
+    <!-- Statistics -->
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <h3>Total Customers</h3>
+            <p id="totalCustomers">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Active Projects</h3>
+            <p id="activeProjects">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Pending Quotations</h3>
+            <p id="pendingQuotes">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Expenses</h3>
+            <p id="totalExpenses">₹0</p>
+        </div>
+
+    </section>
+
+    <!-- Recent Projects -->
+    <section class="dashboard-section">
+
+        <div class="section-header">
+            <h2>Recent Projects</h2>
+            <button>Add Project</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Client</th>
+                    <th>Status</th>
+                    <th>Budget</th>
+                </tr>
+            </thead>
+
+            <tbody id="projectTable">
+            </tbody>
+
+        </table>
+
+    </section>
+
+    <!-- Recent Customers -->
+    <section class="dashboard-section">
+
+        <div class="section-header">
+            <h2>Recent Customers</h2>
+            <button>Add Customer</button>
+        </div>
+
+        <div id="customerCards">
+        </div>
+
+    </section>
+
+</main>
+```
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
