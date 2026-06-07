@@ -1,7 +1,7 @@
-/* =========================
-RMP INTERIOR ERP
-app.js Version 1.0
-========================= */
+/* ==========================
+   RMP ERP v1.1
+   Customer + Project Module
+========================== */
 
 let customers =
 JSON.parse(localStorage.getItem("customers")) || [];
@@ -15,9 +15,9 @@ JSON.parse(localStorage.getItem("quotations")) || [];
 let expenses =
 JSON.parse(localStorage.getItem("expenses")) || [];
 
-/* =========================
-Save Database
-========================= */
+/* ==========================
+   SAVE DATABASE
+========================== */
 
 function saveDatabase(){
 
@@ -45,80 +45,73 @@ updateDashboard();
 
 }
 
-/* =========================
-Dashboard
-========================= */
+/* ==========================
+   DASHBOARD
+========================== */
 
 function updateDashboard(){
 
-const customerCount =
-document.getElementById("totalCustomers");
-
-if(customerCount){
-
-customerCount.textContent =
+document.getElementById(
+"totalCustomers"
+).textContent =
 customers.length;
 
-}
-
-const projectCount =
-document.getElementById("activeProjects");
-
-if(projectCount){
-
-projectCount.textContent =
+document.getElementById(
+"activeProjects"
+).textContent =
 projects.length;
 
-}
-
-const quoteCount =
-document.getElementById("pendingQuotes");
-
-if(quoteCount){
-
-quoteCount.textContent =
+document.getElementById(
+"pendingQuotes"
+).textContent =
 quotations.length;
 
-}
-
-const expenseCount =
-document.getElementById("totalExpenses");
-
-if(expenseCount){
-
-let total =
+let totalExpense =
 expenses.reduce(
-(sum,item)=>sum + Number(item.amount || 0),
+(sum,item)=>
+sum + Number(item.amount || 0),
 0
 );
 
-expenseCount.textContent =
-"₹" + total.toLocaleString();
+document.getElementById(
+"totalExpenses"
+).textContent =
+"₹" + totalExpense.toLocaleString();
 
 }
 
-}
-
-/* =========================
-Customer Module
-========================= */
+/* ==========================
+   CUSTOMER MODULE
+========================== */
 
 function addCustomer(){
 
 const name =
-prompt("Customer Name");
-
-if(!name) return;
+document.getElementById(
+"customerName"
+).value.trim();
 
 const phone =
-prompt("Mobile Number");
+document.getElementById(
+"customerPhone"
+).value.trim();
 
 const address =
-prompt("Address");
+document.getElementById(
+"customerAddress"
+).value.trim();
+
+if(!name){
+
+alert("Enter Customer Name");
+
+return;
+
+}
 
 customers.push({
 
-id: Date.now(),
+id:Date.now(),
 
 name:name,
 
@@ -132,57 +125,143 @@ saveDatabase();
 
 renderCustomers();
 
+clearCustomerForm();
+
 }
 
 function renderCustomers(){
 
 const container =
-document.getElementById("customerCards");
-
-if(!container) return;
+document.getElementById(
+"customerCards"
+);
 
 container.innerHTML = "";
 
 customers.forEach(customer=>{
 
-const card =
-document.createElement("div");
+container.innerHTML += `
 
-card.className =
-"customer-card";
-
-card.innerHTML = `
+<div class="customer-card">
 
 <h4>${customer.name}</h4>
 
-<p>${customer.phone || ""}</p>
+<p>${customer.phone}</p>
 
-<p>${customer.address || ""}</p>
+<p>${customer.address}</p>
+
+<button
+class="delete-btn"
+onclick="deleteCustomer(${customer.id})">
+
+Delete
+
+</button>
+
+</div>
 
 `;
-
-container.appendChild(card);
 
 });
 
 }
 
-/* =========================
-Project Module
-========================= */
+function deleteCustomer(id){
+
+if(
+!confirm(
+"Delete this customer?"
+)
+)return;
+
+customers =
+customers.filter(
+customer =>
+customer.id !== id
+);
+
+saveDatabase();
+
+renderCustomers();
+
+}
+
+function clearCustomerForm(){
+
+document.getElementById(
+"customerName"
+).value="";
+
+document.getElementById(
+"customerPhone"
+).value="";
+
+document.getElementById(
+"customerAddress"
+).value="";
+
+}
+
+/* ==========================
+   SEARCH CUSTOMER
+========================== */
+
+function searchCustomers(){
+
+const keyword =
+document.getElementById(
+"customerSearch"
+).value.toLowerCase();
+
+const cards =
+document.querySelectorAll(
+".customer-card"
+);
+
+cards.forEach(card=>{
+
+const text =
+card.innerText.toLowerCase();
+
+card.style.display =
+text.includes(keyword)
+? "block"
+: "none";
+
+});
+
+}
+
+/* ==========================
+   PROJECT MODULE
+========================== */
 
 function addProject(){
 
 const projectName =
-prompt("Project Name");
-
-if(!projectName) return;
+document.getElementById(
+"projectName"
+).value.trim();
 
 const clientName =
-prompt("Client Name");
+document.getElementById(
+"clientName"
+).value.trim();
 
 const budget =
-prompt("Budget");
+document.getElementById(
+"projectBudget"
+).value.trim();
+
+if(!projectName){
+
+alert(
+"Enter Project Name"
+);
+
+return;
+
+}
 
 projects.push({
 
@@ -202,14 +281,16 @@ saveDatabase();
 
 renderProjects();
 
+clearProjectForm();
+
 }
 
 function renderProjects(){
 
 const table =
-document.getElementById("projectTable");
-
-if(!table) return;
+document.getElementById(
+"projectTable"
+);
 
 table.innerHTML = "";
 
@@ -219,13 +300,33 @@ table.innerHTML += `
 
 <tr>
 
-<td>${project.projectName}</td>
+<td>
+${project.projectName}
+</td>
 
-<td>${project.clientName}</td>
+<td>
+${project.clientName}
+</td>
 
-<td>${project.status}</td>
+<td>
+${project.status}
+</td>
 
-<td>₹${project.budget || 0}</td>
+<td>
+₹${project.budget}
+</td>
+
+<td>
+
+<button
+class="delete-btn"
+onclick="deleteProject(${project.id})">
+
+Delete
+
+</button>
+
+</td>
 
 </tr>
 
@@ -235,64 +336,45 @@ table.innerHTML += `
 
 }
 
-/* =========================
-Expense Module
-========================= */
+function deleteProject(id){
 
-function addExpense(){
+if(
+!confirm(
+"Delete this project?"
+)
+)return;
 
-const title =
-prompt("Expense Title");
-
-const amount =
-prompt("Amount");
-
-expenses.push({
-
-id:Date.now(),
-
-title,
-
-amount
-
-});
+projects =
+projects.filter(
+project =>
+project.id !== id
+);
 
 saveDatabase();
 
-}
-
-/* =========================
-Quotation Module
-========================= */
-
-function addQuotation(){
-
-const customer =
-prompt("Customer Name");
-
-const amount =
-prompt("Quotation Amount");
-
-const quoteNo =
-"RMP-QT-" + Date.now();
-
-quotations.push({
-
-quoteNo,
-
-customer,
-
-amount
-
-});
-
-saveDatabase();
+renderProjects();
 
 }
 
-/* =========================
-JSON Backup
-========================= */
+function clearProjectForm(){
+
+document.getElementById(
+"projectName"
+).value="";
+
+document.getElementById(
+"clientName"
+).value="";
+
+document.getElementById(
+"projectBudget"
+).value="";
+
+}
+
+/* ==========================
+   JSON BACKUP
+========================== */
 
 function exportBackup(){
 
@@ -310,17 +392,31 @@ expenses
 
 const blob =
 new Blob(
-[JSON.stringify(data,null,2)],
+
+[
+JSON.stringify(
+data,
+null,
+2
+)
+],
+
 {
-type:"application/json"
+type:
+"application/json"
 }
+
 );
 
 const link =
-document.createElement("a");
+document.createElement(
+"a"
+);
 
 link.href =
-URL.createObjectURL(blob);
+URL.createObjectURL(
+blob
+);
 
 link.download =
 "RMP_Backup.json";
@@ -329,9 +425,9 @@ link.click();
 
 }
 
-/* =========================
-JSON Restore
-========================= */
+/* ==========================
+   IMPORT BACKUP
+========================== */
 
 function importBackup(event){
 
@@ -343,10 +439,13 @@ if(!file) return;
 const reader =
 new FileReader();
 
-reader.onload = function(e){
+reader.onload =
+function(e){
 
 const data =
-JSON.parse(e.target.result);
+JSON.parse(
+e.target.result
+);
 
 customers =
 data.customers || [];
@@ -372,15 +471,18 @@ alert(
 
 };
 
-reader.readAsText(file);
+reader.readAsText(
+file
+);
 
 }
 
-/* =========================
-Initialize
-========================= */
+/* ==========================
+   INITIALIZE
+========================== */
 
-window.onload = function(){
+window.onload =
+function(){
 
 updateDashboard();
 
